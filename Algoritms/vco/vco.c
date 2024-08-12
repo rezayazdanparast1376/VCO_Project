@@ -1,4 +1,7 @@
-#include "configManager.h"
+#include <stdint.h>
+#include "../../configManager/configManager.h"
+#include "../../OtherLibs/other_lib.h"
+
 
 void generate_pulse(void) {
     double   arr_factor = rescale(adc_value, 0, 65535, 1, 10);

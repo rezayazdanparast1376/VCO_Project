@@ -1,6 +1,6 @@
 #include "io_link.h"
 #include "main.h"
-
+#include "../configManager/configManager.h"
 void receive_all(void) {
 
 }

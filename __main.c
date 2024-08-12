@@ -3,16 +3,7 @@
 #include "stdint.h"
 #include "configManager/configManager.h"
 #include "io_link.h"
-
-
-
-double rescale(double var, double min, double max, double newmin, double newmax) {
-    return ((((newmax) - (newmin)) / ((max) - (min))) * ((var) - (min)) + (newmin));
-}
-
-
-
-
+#include "Algoritms/vco/vco.h"
 
 
 
@@ -27,19 +18,15 @@ int main(void) {
     while (1) {
       receive_all();
       generate_pulse();
-
-        // adc_value = HAL_ADC_GetValue(&hadc1);
-
     }
 
 }
 
 
 
-
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
 	adc_conv_complete_flag = 1;
-    __NOP();
+  __NOP();
 }
 
 
