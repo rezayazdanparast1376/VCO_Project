@@ -31,11 +31,7 @@ void config_functions(void) {
 
     HAL_StatusTypeDef status = HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_result, 1);
 
-    __HAL_TIM_SET_PRESCALER(&htim1, 63);
-    TIM1->CCR1 = 3;
-    TIM1->ARR = 10;
-
-    HAL_GPIO_WritePin(LED_1_PC1_GPIO_Port, LED_1_PC1_Pin, GPIO_PIN_SET);
+    initialize_pwm_signal();
     
 }
 

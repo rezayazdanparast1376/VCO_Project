@@ -24,7 +24,6 @@
 // static void MX_USART1_UART_Init(void);
 
 // uint32_t adc_value = 0;
-// uint8_t adc_conv_complete_flag = 0;
 
 // uint16_t adc_dma_result[1] = {0};
 
@@ -71,11 +70,6 @@
 // 		TIM1->CCR1 = (pre_arr / 2);
 // 	}
 
-
-//     if (adc_conv_complete_flag) {
-//       adc_value = adc_dma_result[0];
-//     }
-//     }
 
 // }
 
@@ -398,14 +392,7 @@
 // /* USER CODE END MX_GPIO_Init_2 */
 // }
 
-// /* USER CODE BEGIN 4 */
-// void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-// 	// I set adc_conv_complete_flag variable to 1 when,
-// 	// HAL_ADC_ConvCpltCallback function is call.
-// 	adc_conv_complete_flag = 1;
-//   __NOP();
-// }
-// /* USER CODE END 4 */
+
 
 // /* MPU Configuration */
 

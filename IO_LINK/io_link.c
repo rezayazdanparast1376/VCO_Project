@@ -2,7 +2,7 @@
 #include "main.h"
 #include "../configManager/configManager.h"
 void receive_all(void) {
-
+    receive_analog();
 }
 
 
