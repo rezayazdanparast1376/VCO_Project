@@ -22,8 +22,10 @@ void initialize_pwm_signal(void) {
 
 
 void generate_pulse(void) {
-    double   arr_factor = rescale(adc_value, 0, 65535, 1, 10);
-    uint32_t arr_final  = (1000) / arr_factor;
+    double arr_factor = rescale(adc_value, 0, 65535, 0, 65535);//for auto calibration
+    arr_factor = rescale(arr_factor, 0, 65535, 1, 100);
+    // uint32_t arr_final  = (1000) / arr_factor;// 100 to 1000 with 10 step with 100 resulousion.
+    uint32_t arr_final  = (10000) / arr_factor;// 10,000 to 100 with 100 step with 100 resulousion.
     
     TIM1->ARR = arr_final;
     uint32_t pre_arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
