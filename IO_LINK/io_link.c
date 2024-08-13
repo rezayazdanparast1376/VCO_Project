@@ -2,7 +2,6 @@
 #include "io_link.h"
 #include "stm32h7b0xx.h"
 #include "stm32h7xx_hal.h"
-#include "../OtherLibs/RawBuffer.h"
 #include "../configManager/configManager.h"
 
 #include "stdbool.h"

@@ -2,7 +2,6 @@
 #include "configManager.h"
 #include "main.h"
 #include "../Algoritms/vco/vco.h"
-#include "../OtherLibs/RawBuffer.h"
 
 ADC_HandleTypeDef   hadc1;
 DMA_HandleTypeDef   hdma_adc1;
