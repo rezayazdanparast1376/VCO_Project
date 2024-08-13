@@ -12,9 +12,12 @@ extern DMA_HandleTypeDef   hdma_adc1;
 extern TIM_HandleTypeDef   htim1;
 extern UART_HandleTypeDef  huart1;
 
-extern uint32_t    adc_value;
-extern uint8_t     adc_conv_complete_flag;
-extern uint16_t    adc_dma_result[1];
+extern uint32_t adc_value;
+extern uint8_t  adc_conv_complete_flag;
+//extern uint16_t adc_dma_result[1];
+extern uint8_t  RxData[4];
+extern uint32_t pwm_factor;
+extern uint32_t  adc_dma_result[1];
 
 void config_functions(void);
 

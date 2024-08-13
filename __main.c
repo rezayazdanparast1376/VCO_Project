@@ -13,20 +13,13 @@
   */
 int main(void) {
 
-  config_functions();
+    config_functions();
 
     while (1) {
       receive_all();
       generate_pulse();
     }
 
-}
-
-
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-	adc_conv_complete_flag = 1;
-  __NOP();
 }
 
 

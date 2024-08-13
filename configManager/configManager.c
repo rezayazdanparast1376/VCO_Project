@@ -8,14 +8,12 @@ ADC_HandleTypeDef   hadc1;
 DMA_HandleTypeDef   hdma_adc1;
 TIM_HandleTypeDef   htim1;
 UART_HandleTypeDef  huart1;
+DMA_HandleTypeDef   hdma_usart1_rx;
 
-RawBuffer   raw_buff_usart                   = {0};
-RawBuffer*  raw_buff_uart_addr               = NULL;
-uint8_t     mem_buf_1[DEFAULT_BUFFER_LENGTH] = {0};
-
-uint32_t    adc_value              = 0;
-uint16_t    adc_dma_result[1]      = {0};
-uint8_t     adc_conv_complete_flag = 0;
+uint32_t  adc_value   = 0;
+uint8_t   RxData[4]   = {0};
+uint32_t  pwm_factor  = 50;
+uint32_t  adc_dma_result[1] = {0};
 
 void config_buffers(void);
 void config_uart1(void);
@@ -23,51 +21,38 @@ void config_uart1(void);
 
 void config_functions(void) {
 
-    MPU_Config();
+  MPU_Config();
 
-    HAL_Init();
+  HAL_Init();
 
-    SystemClock_Config();
+  SystemClock_Config();
 
-    MX_GPIO_Init();
-    MX_DMA_Init();
-    MX_TIM1_Init();
-    MX_ADC1_Init();
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_TIM1_Init();
+  MX_ADC1_Init();
 
-    config_buffers();
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  config_uart1();
+  
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_result, 1);
+  
+  initialize_pwm_signal();
     
-    config_uart1();
-    
-    HAL_StatusTypeDef status = HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_dma_result, 1);
-
-    
-    initialize_pwm_signal();
-    
-}
-
-void config_buffers(void) {
-	  InitRawBuffer(&raw_buff_usart, sizeof(mem_buf_1), 1, mem_buf_1);
-	  raw_buff_uart_addr = &raw_buff_usart;
 }
 
 
 void config_uart1(void) {
-    MX_USART1_UART_Init();
+  MX_USART1_UART_Init();
 
-    char message[1] = {0};
-    HAL_UART_Receive_IT(&huart1, message, 1);
-    if (message[0] != 0) {
-      rbPush(raw_buff_uart_addr, 1, message, 1);
-    }
+  HAL_UART_Receive_DMA(&huart1, RxData, 4);
 }
 
 
 
 
 
-// ==========================
 
 /**
   * @brief System Clock Configuration
@@ -136,7 +121,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-void MX_ADC1_Init(void)
+ void MX_ADC1_Init(void)
 {
 
   /* USER CODE BEGIN ADC1_Init 0 */
@@ -204,7 +189,7 @@ void MX_ADC1_Init(void)
   * @param None
   * @retval None
   */
-void MX_TIM1_Init(void)
+ void MX_TIM1_Init(void)
 {
 
   /* USER CODE BEGIN TIM1_Init 0 */
@@ -330,7 +315,7 @@ void MX_TIM1_Init(void)
 /**
   * Enable DMA controller clock
   */
-void MX_DMA_Init(void)
+ void MX_DMA_Init(void)
 {
 
   /* DMA controller clock enable */
@@ -340,6 +325,9 @@ void MX_DMA_Init(void)
   /* DMA1_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+  /* DMA1_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
 
 }
 
@@ -348,7 +336,7 @@ void MX_DMA_Init(void)
   * @param None
   * @retval None
   */
-void MX_GPIO_Init(void)
+ void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 /* USER CODE BEGIN MX_GPIO_Init_1 */
@@ -384,10 +372,6 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
-
-
-// =============================
-
 
 
 

@@ -24,13 +24,31 @@ void initialize_pwm_signal(void) {
 void generate_pulse(void) {
     double arr_factor = rescale(adc_value, 0, 65535, 0, 65535);//for auto calibration
     arr_factor = rescale(arr_factor, 0, 65535, 1, 100);
-    // uint32_t arr_final  = (1000) / arr_factor;// 100 to 1000 with 10 step with 100 resulousion.
+
     uint32_t arr_final  = (10000) / arr_factor;// 10,000 to 100 with 100 step with 100 resulousion.
     
     TIM1->ARR = arr_final;
+
+    set_duty_cycle(pwm_factor);
+}
+
+
+
+
+void set_duty_cycle(uint8_t __duty_factor) {
+    if (__duty_factor > 100) {
+        return;
+    }
+    
     uint32_t pre_arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
 
-    if (pre_arr > 2) {//Set Duty cycle to 50%
-        TIM1->CCR1 = (pre_arr / 2);
+    if (pre_arr > 2) {
+        if ((pre_arr % 2) == 1) {
+            TIM1->ARR = pre_arr + 1;
+            TIM1->CCR1 = (TIM1->ARR * __duty_factor) / 100;
+        }
+        else {
+            TIM1->CCR1 = (TIM1->ARR * __duty_factor) / 100;
+        }
     }
 }
